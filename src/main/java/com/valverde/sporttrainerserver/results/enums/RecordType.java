@@ -1,6 +1,5 @@
-package com.valverde.sporttrainerserver.activity.enums;
+package com.valverde.sporttrainerserver.results.enums;
 
-import com.valverde.sporttrainerserver.activity.enums.RecordMeasureType;
 import lombok.Getter;
 
 public enum RecordType {

@@ -1,7 +1,7 @@
-package com.valverde.sporttrainerserver.activity.dto;
+package com.valverde.sporttrainerserver.results.dto;
 
-import com.valverde.sporttrainerserver.activity.entity.ActivityRecord;
-import com.valverde.sporttrainerserver.activity.enums.RecordType;
+import com.valverde.sporttrainerserver.results.entity.ActivityRecord;
+import com.valverde.sporttrainerserver.results.enums.RecordType;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 

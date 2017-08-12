@@ -1,4 +1,4 @@
-package com.valverde.sporttrainerserver.activity.enums;
+package com.valverde.sporttrainerserver.results.enums;
 
 public enum  RecordMeasureType {
     DISTANCE,

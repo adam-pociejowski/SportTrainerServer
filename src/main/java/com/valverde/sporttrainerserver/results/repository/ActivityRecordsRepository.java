@@ -1,11 +1,11 @@
-package com.valverde.sporttrainerserver.activity.repository;
+package com.valverde.sporttrainerserver.results.repository;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
-import com.valverde.sporttrainerserver.activity.entity.ActivityRecord;
-import com.valverde.sporttrainerserver.activity.enums.RecordMeasureType;
-import com.valverde.sporttrainerserver.activity.enums.RecordType;
+import com.valverde.sporttrainerserver.results.entity.ActivityRecord;
+import com.valverde.sporttrainerserver.results.enums.RecordMeasureType;
+import com.valverde.sporttrainerserver.results.enums.RecordType;
 import com.valverde.sporttrainerserver.activity.util.ActivityUtils;
-import com.valverde.sporttrainerserver.activity.dto.ActivityRecordDTO;
+import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Component;

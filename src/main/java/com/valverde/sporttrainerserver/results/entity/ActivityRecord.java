@@ -1,6 +1,7 @@
-package com.valverde.sporttrainerserver.activity.entity;
+package com.valverde.sporttrainerserver.results.entity;
 
-import com.valverde.sporttrainerserver.activity.enums.RecordType;
+import com.valverde.sporttrainerserver.activity.entity.Activity;
+import com.valverde.sporttrainerserver.results.enums.RecordType;
 import lombok.Data;
 import javax.persistence.*;
 

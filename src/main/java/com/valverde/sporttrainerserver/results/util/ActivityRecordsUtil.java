@@ -1,10 +1,11 @@
-package com.valverde.sporttrainerserver.activity.util.records;
+package com.valverde.sporttrainerserver.results.util;
 
-import com.valverde.sporttrainerserver.activity.enums.RecordMeasureType;
-import com.valverde.sporttrainerserver.activity.enums.RecordType;
 import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
-import com.valverde.sporttrainerserver.activity.dto.ActivityRecordDTO;
 import com.valverde.sporttrainerserver.activity.dto.TrackPointDTO;
+import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
+import com.valverde.sporttrainerserver.results.enums.RecordMeasureType;
+import com.valverde.sporttrainerserver.results.enums.RecordType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

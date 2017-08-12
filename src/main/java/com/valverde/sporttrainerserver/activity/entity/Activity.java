@@ -2,6 +2,7 @@ package com.valverde.sporttrainerserver.activity.entity;
 
 import com.valverde.sporttrainerserver.base.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
+import com.valverde.sporttrainerserver.results.entity.ActivityRecord;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;

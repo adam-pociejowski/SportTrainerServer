@@ -1,8 +1,8 @@
-package com.valverde.sporttrainerserver.activity.service;
+package com.valverde.sporttrainerserver.results.service;
 
-import com.valverde.sporttrainerserver.activity.repository.ActivityRecordsRepository;
-import com.valverde.sporttrainerserver.activity.dto.ActivityRecordDTO;
-import com.valverde.sporttrainerserver.activity.dto.UserRecordsDTO;
+import com.valverde.sporttrainerserver.results.repository.ActivityRecordsRepository;
+import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
+import com.valverde.sporttrainerserver.results.dto.UserRecordsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -28,7 +28,7 @@ public class RegisterRestController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             log.info("User with username: "+register.getUsername()+" has validation errors.");
-            return new ResponseEntity<>(validationErrors, HttpStatus.OK);
+            return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             log.error("Problem while register", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

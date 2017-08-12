@@ -10,5 +10,5 @@ public class RegisterValidationDTO {
 
     private ValidationErrorType type;
 
-    private String messsage;
+    private String message;
 }

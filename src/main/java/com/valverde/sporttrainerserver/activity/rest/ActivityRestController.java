@@ -1,12 +1,9 @@
 package com.valverde.sporttrainerserver.activity.rest;
 
+import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.service.ActivityService;
-import com.valverde.sporttrainerserver.activity.service.UserRecordsService;
-import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
-import com.valverde.sporttrainerserver.activity.dto.UserRecordsDTO;
 import lombok.extern.apachecommons.CommonsLog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,22 +21,11 @@ public class ActivityRestController {
                              @RequestParam MultipartFile file) {
         try {
             activityService.upload(file, username, ActivityType.RUNNING);
-            log.info("Activity uploaded");
+            log.info("User "+username+" uploaded new activity");
             return HttpStatus.OK;
         } catch (Exception e) {
-            log.error("Problem while uploading activity", e);
+            log.error("Problem while uploading activity. User: "+username, e);
             return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-    }
-
-    @GetMapping("/{username}/getRecords")
-    public ResponseEntity<UserRecordsDTO> getRecords(@PathVariable String username) {
-        try {
-            UserRecordsDTO userRecords = userRecordsService.findUserRecords(username, null, null);
-            return new ResponseEntity<>(userRecords, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error(TAG + "Problem while getting info about records", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,15 +63,9 @@ public class ActivityRestController {
         }
     }
 
-    @Autowired
-    public ActivityRestController(ActivityService activityService, UserRecordsService userRecordsService) {
+    public ActivityRestController(ActivityService activityService) {
         this.activityService = activityService;
-        this.userRecordsService = userRecordsService;
     }
 
-    private final static String TAG = "["+ActivityService.class.getSimpleName()+"] ";
-
     private final ActivityService activityService;
-
-    private final UserRecordsService userRecordsService;
 }

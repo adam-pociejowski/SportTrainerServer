@@ -7,7 +7,7 @@ import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.repository.ActivityRepository;
 import com.valverde.sporttrainerserver.activity.service.parser.ActivityParser;
 import com.valverde.sporttrainerserver.activity.util.ActivitySplitUtil;
-import com.valverde.sporttrainerserver.activity.util.records.ActivityRecordsUtil;
+import com.valverde.sporttrainerserver.results.util.ActivityRecordsUtil;
 import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;

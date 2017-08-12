@@ -1,6 +1,7 @@
-package com.valverde.sporttrainerserver.activity.dto;
+package com.valverde.sporttrainerserver.results.dto;
 
 import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
 
