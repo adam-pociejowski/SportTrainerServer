@@ -21,6 +21,7 @@ public class ResultsSummaryRepository {
         List<SummaryDTO> summaryList = new ArrayList<>();
         addToListIfNotNull(findSummary(ResultSummaryType.DISTANCE, username, intervalBegin, intervalEnd), summaryList);
         addToListIfNotNull(findSummary(ResultSummaryType.TIME, username, intervalBegin, intervalEnd), summaryList);
+        addToListIfNotNull(findSummary(ResultSummaryType.CALORIES, username, intervalBegin, intervalEnd), summaryList);
         return summaryList;
     }
 
@@ -68,6 +69,8 @@ public class ResultsSummaryRepository {
             return "SUM(a.distance)";
         } else if (type.equals(ResultSummaryType.TIME)) {
             return "SUM(a.totalTime)";
+        } else if (type.equals(ResultSummaryType.CALORIES)) {
+            return "SUM(a.calories)";
         }
         throw new RuntimeException("ResultSummaryType not found.");
     }
