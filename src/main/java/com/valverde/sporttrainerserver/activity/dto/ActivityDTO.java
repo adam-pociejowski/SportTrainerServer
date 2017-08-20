@@ -1,6 +1,7 @@
 package com.valverde.sporttrainerserver.activity.dto;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
+import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.base.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
@@ -30,6 +31,8 @@ public class ActivityDTO {
     private Double distance;
 
     private Integer calories;
+
+    private ActivityOrigin origin;
 
     public static ActivityDTO toDTO(@NotNull Activity activity) {
         return new ModelMapper().map(activity, ActivityDTO.class);

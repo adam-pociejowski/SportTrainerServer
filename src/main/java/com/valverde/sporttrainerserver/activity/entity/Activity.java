@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.activity.entity;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.base.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.results.entity.ActivityRecord;
@@ -31,6 +32,9 @@ public class Activity {
 
     @Enumerated(EnumType.STRING)
     private ActivityType type;
+
+    @Enumerated(EnumType.STRING)
+    private ActivityOrigin origin;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

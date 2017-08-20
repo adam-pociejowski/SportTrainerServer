@@ -1,6 +1,7 @@
 package com.valverde.sporttrainerserver.activity.rest;
 
 import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
+import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.service.ActivityService;
 import lombok.extern.apachecommons.CommonsLog;
@@ -25,6 +26,22 @@ public class ActivityRestController {
             return HttpStatus.OK;
         } catch (Exception e) {
             log.error("Problem while uploading activity. User: "+username, e);
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+    }
+
+    @PostMapping("/{username}/uploadApp/activity")
+    public HttpStatus uploadFromApp(@PathVariable String username,
+                                    @RequestBody ActivityDTO activity) {
+        try {
+            activityService.calculateAndSave(username,
+                    ActivityType.RUNNING,
+                    activity,
+                    ActivityOrigin.SPORT_TRAINER_APP_ANDROID);
+            log.info("User "+username+" uploaded new activity from app");
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            log.error("Problem while uploading activity from app. User: "+username, e);
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }

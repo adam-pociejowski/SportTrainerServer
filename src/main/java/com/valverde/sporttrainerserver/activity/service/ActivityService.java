@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.activity.service;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.base.service.UserService;
 import com.valverde.sporttrainerserver.activity.entity.Activity;
 import com.valverde.sporttrainerserver.base.entity.User;
@@ -40,8 +41,19 @@ public class ActivityService {
 
     public void upload(MultipartFile multipartFile, String username, ActivityType type) throws Exception {
         ActivityDTO activityDTO = tcxActivityParser.parse(multipartFile, type);
+        calculateAndSave(username,
+                type,
+                activityDTO,
+                ActivityOrigin.TCX_UPLOAD);
+    }
+
+    public void calculateAndSave(String username,
+                                 ActivityType type,
+                                 ActivityDTO activityDTO,
+                                 ActivityOrigin origin) {
         ActivityRecordsUtil.calculateActivityRecords(activityDTO);
         ActivitySplitUtil.calculateSplits(type.getSplitInterval(), activityDTO);
+        activityDTO.setOrigin(origin);
         save(activityDTO, userService.findByUsername(username));
     }
 
