@@ -25,6 +25,37 @@ public class ResultsSummaryRepository {
         return summaryList;
     }
 
+    public Long getActivitiesCount(String username, Date intervalBegin, Date intervalEnd) {
+        EntityManager em = createEntityManager(Activity.class);
+        final String queryString = createActivitiesCountQuery(intervalBegin, intervalEnd);
+        TypedQuery query = em.createQuery(queryString, Long.class);
+        try {
+            setParams(username, intervalBegin, intervalEnd, query);
+            return (Long)query.getSingleResult();
+        } catch (Exception e) {
+            log.warn("Problem while getting info about activities count.", e);
+        } finally {
+            em.close();
+        }
+        return 0L;
+    }
+
+    private void setParams(String username, Date intervalBegin, Date intervalEnd, TypedQuery query) {
+        query.setParameter("username", username);
+        if (intervalBegin != null) {
+            query.setParameter("intervalBegin", intervalBegin);
+        }
+        if (intervalBegin != null && intervalEnd != null) {
+            query.setParameter("intervalEnd", intervalEnd);
+        }
+    }
+
+    private String createActivitiesCountQuery(Date intervalBegin, Date intervalEnd) {
+        return "SELECT COUNT(a.id) FROM Activity a " +
+        "JOIN a.user u WHERE u.username = :username " +
+                getIntervalClause(intervalBegin, intervalEnd);
+    }
+
     private void addToListIfNotNull(SummaryDTO summary, List<SummaryDTO> summaryList) {
         if (summary != null)
             summaryList.add(summary);
@@ -38,13 +69,7 @@ public class ResultsSummaryRepository {
         if (type.equals(ResultSummaryType.DISTANCE)) query = em.createQuery(queryString, Double.class);
         else query = em.createQuery(queryString, Long.class);
         try {
-            query.setParameter("username", username);
-            if (intervalBegin != null) {
-                query.setParameter("intervalBegin", intervalBegin);
-            }
-            if (intervalBegin != null && intervalEnd != null) {
-                query.setParameter("intervalEnd", intervalEnd);
-            }
+            setParams(username, intervalBegin, intervalEnd, query);
             Object obj = query.getSingleResult();
             Double result;
             if (obj instanceof Double)  result = (Double) obj;

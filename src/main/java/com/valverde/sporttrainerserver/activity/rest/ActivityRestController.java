@@ -6,6 +6,7 @@ import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.service.ActivityService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,7 @@ public class ActivityRestController {
                                                                Pageable pageable) {
         try {
             Page<ActivityDTO> activities = activityService.findSortedActivities(pageable, username);
+
             return new ResponseEntity<>(activities, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Problem while getting info about activities for user: "+username, e);

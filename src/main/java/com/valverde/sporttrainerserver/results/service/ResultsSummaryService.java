@@ -5,7 +5,6 @@ import com.valverde.sporttrainerserver.results.dto.SummaryDTO;
 import com.valverde.sporttrainerserver.results.repository.ResultsSummaryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,8 @@ public class ResultsSummaryService {
 
     public ResultsSummaryDTO findResultsSummary(String username, Date intervalBegin, Date intervalEnd) {
         final List<SummaryDTO> summariesList = resultsSummaryRepository.getSummary(username, intervalBegin, intervalEnd);
-        return new ResultsSummaryDTO(intervalBegin, intervalEnd, summariesList);
+        final Long activitiesCount = resultsSummaryRepository.getActivitiesCount(username, intervalBegin, intervalEnd);
+        return new ResultsSummaryDTO(intervalBegin, intervalEnd, summariesList, activitiesCount);
     }
 
     public ResultsSummaryService(ResultsSummaryRepository resultsSummaryRepository) {

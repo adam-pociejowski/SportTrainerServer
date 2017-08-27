@@ -15,4 +15,5 @@ public class ResultsSummaryDTO {
 
     private List<SummaryDTO> results;
 
+    private Long activitiesAmount;
 }
