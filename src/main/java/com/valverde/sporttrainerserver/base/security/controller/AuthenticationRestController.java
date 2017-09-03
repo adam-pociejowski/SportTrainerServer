@@ -43,12 +43,15 @@ public class AuthenticationRestController {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
+        String refreshedToken = jwtTokenUtil.refreshToken(token);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
+
+//        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
+//            String refreshedToken = jwtTokenUtil.refreshToken(token);
+//            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
+//        } else {
+//            return ResponseEntity.badRequest().body(null);
+//        }
     }
 
     @Autowired
