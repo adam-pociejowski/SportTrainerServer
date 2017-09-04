@@ -1,10 +1,10 @@
-package com.valverde.sporttrainerserver.results.util;
+package com.valverde.sporttrainerserver.statistics.util;
 
 import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import com.valverde.sporttrainerserver.activity.dto.TrackPointDTO;
-import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
-import com.valverde.sporttrainerserver.results.enums.RecordMeasureType;
-import com.valverde.sporttrainerserver.results.enums.RecordType;
+import com.valverde.sporttrainerserver.statistics.dto.ActivityStatsDTO;
+import com.valverde.sporttrainerserver.statistics.enums.RecordMeasureType;
+import com.valverde.sporttrainerserver.statistics.enums.RecordType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,13 +15,13 @@ public class ActivityRecordsUtil {
 
     public static void calculateActivityRecords(ActivityDTO activity) {
         List<RecordType> recordTypes = generateRunningRecordsTypes(activity);
-        List<ActivityRecordDTO> records = calculateRecords(activity.getTrackPoints(), recordTypes, activity.getId());
+        List<ActivityStatsDTO> records = calculateRecords(activity.getTrackPoints(), recordTypes, activity.getId());
         activity.setActivityRecords(records);
     }
 
-    private static List<ActivityRecordDTO> calculateRecords(List<TrackPointDTO> trackPoints,
-                                                            List<RecordType> recordTypes,
-                                                            Long activityId) {
+    private static List<ActivityStatsDTO> calculateRecords(List<TrackPointDTO> trackPoints,
+                                                           List<RecordType> recordTypes,
+                                                           Long activityId) {
         List<ActualRecord> actualRecords = generateActualRecords(recordTypes, trackPoints.get(0));
         for (TrackPointDTO point : trackPoints) {
             for (ActualRecord record : actualRecords) {
@@ -38,10 +38,10 @@ public class ActivityRecordsUtil {
         return createActivityRecords(actualRecords, activityId);
     }
 
-    private static List<ActivityRecordDTO> createActivityRecords(List<ActualRecord> actualRecords, Long activityId) {
-        List<ActivityRecordDTO> activityRecords = new ArrayList<>();
+    private static List<ActivityStatsDTO> createActivityRecords(List<ActualRecord> actualRecords, Long activityId) {
+        List<ActivityStatsDTO> activityRecords = new ArrayList<>();
         for (ActualRecord actualRecord : actualRecords) {
-            ActivityRecordDTO activityRecord = new ActivityRecordDTO();
+            ActivityStatsDTO activityRecord = new ActivityStatsDTO();
             activityRecord.setActivityId(activityId);
             activityRecord.setType(actualRecord.getType());
             if (actualRecord.getType().getMeasureType().equals(RecordMeasureType.DISTANCE)) {

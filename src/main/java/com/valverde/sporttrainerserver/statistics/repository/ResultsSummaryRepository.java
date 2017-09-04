@@ -1,12 +1,12 @@
-package com.valverde.sporttrainerserver.results.repository;
+package com.valverde.sporttrainerserver.statistics.repository;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
-import com.valverde.sporttrainerserver.results.dto.SummaryDTO;
-import com.valverde.sporttrainerserver.results.enums.ResultSummaryType;
+import com.valverde.sporttrainerserver.statistics.dto.SummaryDTO;
+import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
 import lombok.extern.apachecommons.CommonsLog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Component;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -17,11 +17,13 @@ import java.util.List;
 @Component
 public class ResultsSummaryRepository {
 
-    public List<SummaryDTO> getSummary(String username, Date intervalBegin, Date intervalEnd) {
+    public List<SummaryDTO> getSummary(final String username,
+                                       final Date intervalBegin,
+                                       final Date intervalEnd,
+                                       final List<ResultSummaryType> types) {
         List<SummaryDTO> summaryList = new ArrayList<>();
-        addToListIfNotNull(findSummary(ResultSummaryType.DISTANCE, username, intervalBegin, intervalEnd), summaryList);
-        addToListIfNotNull(findSummary(ResultSummaryType.TIME, username, intervalBegin, intervalEnd), summaryList);
-        addToListIfNotNull(findSummary(ResultSummaryType.CALORIES, username, intervalBegin, intervalEnd), summaryList);
+        types.forEach(type ->
+                addToListIfNotNull(findSummary(type, username, intervalBegin, intervalEnd), summaryList));
         return summaryList;
     }
 

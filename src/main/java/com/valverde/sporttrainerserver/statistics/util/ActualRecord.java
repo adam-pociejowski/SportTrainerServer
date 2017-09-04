@@ -1,6 +1,6 @@
-package com.valverde.sporttrainerserver.results.util;
+package com.valverde.sporttrainerserver.statistics.util;
 
-import com.valverde.sporttrainerserver.results.enums.RecordType;
+import com.valverde.sporttrainerserver.statistics.enums.RecordType;
 import com.valverde.sporttrainerserver.activity.dto.TrackPointDTO;
 import lombok.Data;
 

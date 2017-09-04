@@ -1,7 +1,7 @@
-package com.valverde.sporttrainerserver.results.rest;
+package com.valverde.sporttrainerserver.statistics.rest;
 
-import com.valverde.sporttrainerserver.results.dto.ResultsSummaryDTO;
-import com.valverde.sporttrainerserver.results.service.ResultsSummaryService;
+import com.valverde.sporttrainerserver.statistics.dto.ResultsSummaryDTO;
+import com.valverde.sporttrainerserver.statistics.service.ResultsSummaryService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

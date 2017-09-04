@@ -1,6 +1,6 @@
-package com.valverde.sporttrainerserver.results.dto;
+package com.valverde.sporttrainerserver.statistics.dto;
 
-import com.valverde.sporttrainerserver.results.enums.ResultSummaryType;
+import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -4,7 +4,7 @@ import com.valverde.sporttrainerserver.activity.entity.Activity;
 import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.base.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
-import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
+import com.valverde.sporttrainerserver.statistics.dto.ActivityStatsDTO;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 import javax.validation.constraints.NotNull;
@@ -18,7 +18,7 @@ public class ActivityDTO {
 
     private List<TrackPointDTO> trackPoints;
 
-    private List<ActivityRecordDTO> activityRecords;
+    private List<ActivityStatsDTO> activityRecords;
 
     private List<SplitDTO> splits;
 

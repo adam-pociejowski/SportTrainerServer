@@ -1,11 +1,11 @@
-package com.valverde.sporttrainerserver.results.repository;
+package com.valverde.sporttrainerserver.statistics.repository;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
-import com.valverde.sporttrainerserver.results.entity.ActivityRecord;
-import com.valverde.sporttrainerserver.results.enums.RecordMeasureType;
-import com.valverde.sporttrainerserver.results.enums.RecordType;
+import com.valverde.sporttrainerserver.statistics.entity.ActivityRecord;
+import com.valverde.sporttrainerserver.statistics.enums.RecordMeasureType;
+import com.valverde.sporttrainerserver.statistics.enums.RecordType;
 import com.valverde.sporttrainerserver.activity.util.ActivityUtils;
-import com.valverde.sporttrainerserver.results.dto.ActivityRecordDTO;
+import com.valverde.sporttrainerserver.statistics.dto.ActivityStatsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,8 @@ import java.util.List;
 @Component
 public class ActivityRecordsRepository {
 
-    public List<ActivityRecordDTO> findRecordsForInterval(@NotNull String username, Date intervalBegin, Date intervalEnd) {
-        List<ActivityRecordDTO> recordsList = new ArrayList<>();
+    public List<ActivityStatsDTO> findRecordsForInterval(@NotNull String username, Date intervalBegin, Date intervalEnd) {
+        List<ActivityStatsDTO> recordsList = new ArrayList<>();
         this.addToListIfNotNull(this.findRecord(username, RecordType.ONE_KILOMETER, intervalBegin, intervalEnd), recordsList);
         this.addToListIfNotNull(this.findRecord(username, RecordType.TWO_KILOMETERS, intervalBegin, intervalEnd), recordsList);
         this.addToListIfNotNull(this.findRecord(username, RecordType.THREE_KILOMETERS, intervalBegin, intervalEnd), recordsList);
@@ -32,12 +32,12 @@ public class ActivityRecordsRepository {
         return recordsList;
     }
 
-    private void addToListIfNotNull(ActivityRecord activityRecord, List<ActivityRecordDTO> recordsList) {
+    private void addToListIfNotNull(ActivityRecord activityRecord, List<ActivityStatsDTO> recordsList) {
         if (activityRecord != null)
-            recordsList.add(ActivityRecordDTO.toDTO(activityRecord));
+            recordsList.add(ActivityStatsDTO.toDTO(activityRecord));
     }
 
-    private void addToListIfDTONotNull(ActivityRecordDTO activityRecord, List<ActivityRecordDTO> recordsList) {
+    private void addToListIfDTONotNull(ActivityStatsDTO activityRecord, List<ActivityStatsDTO> recordsList) {
         if (activityRecord != null) {
             recordsList.add(activityRecord);
         }
@@ -78,7 +78,7 @@ public class ActivityRecordsRepository {
                 "ORDER BY ar.value " + this.getSortType(recordType);
     }
 
-    private ActivityRecordDTO findBestActivityRecord(@NotNull String username, @NotNull RecordType recordType,
+    private ActivityStatsDTO findBestActivityRecord(@NotNull String username, @NotNull RecordType recordType,
                                                     Date intervalBegin, Date intervalEnd) {
         String queryString = createLongestDistanceQueryString(recordType, intervalBegin, intervalEnd);
         EntityManager em = createEntityManager(Activity.class);
@@ -94,7 +94,7 @@ public class ActivityRecordsRepository {
             query.setMaxResults(1);
             Activity activity = (Activity)query.getSingleResult();
             if (activity != null) {
-                ActivityRecordDTO recordDTO = new ActivityRecordDTO();
+                ActivityStatsDTO recordDTO = new ActivityStatsDTO();
                 recordDTO.setActivityId(activity.getId());
                 switch(recordType) {
                     case LONGEST_DISTANCE:

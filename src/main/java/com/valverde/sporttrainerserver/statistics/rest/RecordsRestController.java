@@ -1,7 +1,7 @@
-package com.valverde.sporttrainerserver.results.rest;
+package com.valverde.sporttrainerserver.statistics.rest;
 
-import com.valverde.sporttrainerserver.results.dto.UserRecordsDTO;
-import com.valverde.sporttrainerserver.results.service.UserRecordsService;
+import com.valverde.sporttrainerserver.statistics.dto.UserStatsSummaryDTO;
+import com.valverde.sporttrainerserver.statistics.service.UserRecordsService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecordsRestController {
 
     @GetMapping("/{username}/getRecords")
-    public ResponseEntity<UserRecordsDTO> getRecords(@PathVariable String username) {
+    public ResponseEntity<UserStatsSummaryDTO> getRecords(@PathVariable String username) {
         try {
-            UserRecordsDTO userRecords = userRecordsService.findUserRecords(username, null, null);
+            UserStatsSummaryDTO userRecords = userRecordsService.findUserRecords(username, null, null);
             return new ResponseEntity<>(userRecords, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Problem while getting info about results for user: "+username, e);
+            log.error("Problem while getting info about statistics for user: "+username, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
