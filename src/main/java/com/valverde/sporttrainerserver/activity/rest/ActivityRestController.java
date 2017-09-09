@@ -6,7 +6,6 @@ import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.service.ActivityService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,10 @@ public class ActivityRestController {
 
     @PostMapping("/{username}/upload/activity")
     public HttpStatus upload(@PathVariable String username,
+                             @RequestParam ActivityType activityType,
                              @RequestParam MultipartFile file) {
         try {
-            activityService.upload(file, username, ActivityType.RUNNING);
+            activityService.upload(file, username, activityType);
             log.info("User "+username+" uploaded new activity");
             return HttpStatus.OK;
         } catch (Exception e) {
@@ -35,10 +35,8 @@ public class ActivityRestController {
     public HttpStatus uploadFromApp(@PathVariable String username,
                                     @RequestBody ActivityDTO activity) {
         try {
-            activityService.calculateAndSave(username,
-                    ActivityType.RUNNING,
-                    activity,
-                    ActivityOrigin.SPORT_TRAINER_APP_ANDROID);
+            activity.setOrigin(ActivityOrigin.SPORT_TRAINER_APP_ANDROID);
+            activityService.calculateAndSave(username, activity.getType(), activity);
             log.info("User "+username+" uploaded new activity from app");
             return HttpStatus.OK;
         } catch (Exception e) {

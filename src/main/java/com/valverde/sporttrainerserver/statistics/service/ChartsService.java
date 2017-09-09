@@ -1,6 +1,7 @@
 package com.valverde.sporttrainerserver.statistics.service;
 
 import com.valverde.sporttrainerserver.statistics.dto.ResultsSummaryDTO;
+import com.valverde.sporttrainerserver.statistics.dto.SummaryDTO;
 import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
 import com.valverde.sporttrainerserver.statistics.repository.ResultsSummaryRepository;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,23 @@ public class ChartsService {
             ResultsSummaryDTO statsSummary = new ResultsSummaryDTO();
             statsSummary.setIntervalBegin(split.start);
             statsSummary.setIntervalEnd(split.end);
-            statsSummary.setResults(
-                    summaryRepository.getSummary(username, split.start, split.end, Collections.singletonList(type)));
+            final List<SummaryDTO> results =
+                    summaryRepository.getSummary(username, split.start, split.end, Collections.singletonList(type));
+            if (results.isEmpty()) {
+                statsSummary.setResults(createEmptySummary(type));
+            } else {
+                statsSummary.setResults(results);
+            }
+            statsSummaries.add(statsSummary);
         }
+        Collections.reverse(statsSummaries);
         return statsSummaries;
+    }
+
+    @NotNull
+    private List<SummaryDTO> createEmptySummary(final ResultSummaryType type) {
+        final SummaryDTO summary = new SummaryDTO(type, 0.0);
+        return Collections.singletonList(summary);
     }
 
     @NotNull

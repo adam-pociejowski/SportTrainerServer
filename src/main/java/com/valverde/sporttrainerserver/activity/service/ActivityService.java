@@ -1,16 +1,16 @@
 package com.valverde.sporttrainerserver.activity.service;
 
-import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
-import com.valverde.sporttrainerserver.base.service.UserService;
+import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import com.valverde.sporttrainerserver.activity.entity.Activity;
-import com.valverde.sporttrainerserver.base.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.repository.ActivityRepository;
-import com.valverde.sporttrainerserver.activity.service.parser.ActivityParser;
+import com.valverde.sporttrainerserver.activity.parser.ActivityParser;
 import com.valverde.sporttrainerserver.activity.util.ActivitySplitUtil;
+import com.valverde.sporttrainerserver.base.entity.User;
+import com.valverde.sporttrainerserver.base.service.UserService;
 import com.valverde.sporttrainerserver.statistics.util.ActivityRecordsUtil;
-import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import lombok.extern.apachecommons.CommonsLog;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
+import static com.valverde.sporttrainerserver.activity.parser.enums.ActivityParserType.*;
 
 @Service
 @CommonsLog
@@ -39,21 +40,19 @@ public class ActivityService {
         log.info(TAG + "Activity id: "+activityId+" deleted.");
     }
 
-    public void upload(MultipartFile multipartFile, String username, ActivityType type) throws Exception {
-        ActivityDTO activityDTO = tcxActivityParser.parse(multipartFile, type);
-        calculateAndSave(username,
-                type,
-                activityDTO,
-                ActivityOrigin.TCX_UPLOAD);
+    public void upload(final MultipartFile multipartFile,
+                       final String username,
+                       final ActivityType type) throws Exception {
+        final ActivityParser activityParser = getActivityParser(multipartFile.getOriginalFilename());
+        final ActivityDTO activity = activityParser.parse(multipartFile, type);
+        calculateAndSave(username, type, activity);
     }
 
     public void calculateAndSave(String username,
                                  ActivityType type,
-                                 ActivityDTO activityDTO,
-                                 ActivityOrigin origin) {
+                                 ActivityDTO activityDTO) {
         ActivityRecordsUtil.calculateActivityRecords(activityDTO);
         ActivitySplitUtil.calculateSplits(type.getSplitInterval(), activityDTO);
-        activityDTO.setOrigin(origin);
         save(activityDTO, userService.findByUsername(username));
     }
 
@@ -69,6 +68,16 @@ public class ActivityService {
         return ActivityDTO.toDTO(activity);
     }
 
+    private ActivityParser getActivityParser(final String fileName) {
+        final String extension = FilenameUtils.getExtension(fileName);
+        if (extension.equalsIgnoreCase(GPX_PARSER.getFileExtension())) {
+            return gpxActivityParser;
+        } else if (extension.equalsIgnoreCase(TCX_PARSER.getFileExtension())) {
+            return tcxActivityParser;
+        }
+        throw new RuntimeException("No parser found for file extension: "+extension);
+    }
+
     private void save(ActivityDTO activityDTO, User user) {
         Activity activity = ActivityDTO.toEntity(activityDTO, user);
         activityRepository.save(activity);
@@ -77,8 +86,9 @@ public class ActivityService {
     @Autowired
     public ActivityService(ActivityRepository activityRepository,
                            ActivityParser tcxActivityParser,
-                           UserService userService) {
+                           ActivityParser gpxActivityParser, UserService userService) {
         this.activityRepository = activityRepository;
+        this.gpxActivityParser = gpxActivityParser;
         this.userService = userService;
         this.tcxActivityParser = tcxActivityParser;
     }
@@ -86,6 +96,8 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
 
     private final ActivityParser tcxActivityParser;
+
+    private final ActivityParser gpxActivityParser;
 
     private final UserService userService;
 

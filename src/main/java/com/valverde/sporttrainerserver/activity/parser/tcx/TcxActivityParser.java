@@ -1,7 +1,8 @@
-package com.valverde.sporttrainerserver.activity.service.parser.tcx;
+package com.valverde.sporttrainerserver.activity.parser.tcx;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
-import com.valverde.sporttrainerserver.activity.service.parser.ActivityParser;
+import com.valverde.sporttrainerserver.activity.parser.ActivityParser;
 import com.valverde.sporttrainerserver.activity.util.FileUtils;
 import com.valverde.sporttrainerserver.activity.dto.ActivityDTO;
 import com.valverde.sporttrainerserver.activity.dto.TrackPointDTO;
@@ -19,7 +20,7 @@ import java.util.List;
 public class TcxActivityParser implements ActivityParser {
 
     @Override
-    public ActivityDTO parse(MultipartFile file, ActivityType type) throws Exception {
+    public ActivityDTO parse(final MultipartFile file, final ActivityType type) throws Exception {
         final Element rootElement = FileUtils.getXmlRoot(file);
         Namespace namespace = rootElement.getNamespace();
         Element activityElement = getActivityElement(rootElement, namespace);
@@ -38,6 +39,7 @@ public class TcxActivityParser implements ActivityParser {
         activity.setCalories(calories);
         activity.setDistance(distance);
         activity.setType(type);
+        activity.setOrigin(ActivityOrigin.TCX_UPLOAD);
         return activity;
     }
 

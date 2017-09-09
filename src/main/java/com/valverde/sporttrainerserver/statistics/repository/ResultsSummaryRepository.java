@@ -74,8 +74,13 @@ public class ResultsSummaryRepository {
             setParams(username, intervalBegin, intervalEnd, query);
             Object obj = query.getSingleResult();
             Double result;
-            if (obj instanceof Double)  result = (Double) obj;
-            else result = ((Long) obj).doubleValue();
+            if (obj == null) {
+                return null;
+            } else if (obj instanceof Double) {
+                result = (Double) obj;
+            } else {
+                result = ((Long) obj).doubleValue();
+            }
             return new SummaryDTO(type, result);
         } catch (Exception e) {
             log.warn("Problem while getting info about summary: "+type, e);
