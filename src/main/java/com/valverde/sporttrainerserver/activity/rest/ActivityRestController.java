@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActivityRestController {
 
-    @PostMapping("/{username}/upload/activity")
+    @PostMapping("/{username}/{activityType}/upload/activity")
     public HttpStatus upload(@PathVariable String username,
-                             @RequestParam ActivityType activityType,
+                             @PathVariable ActivityType activityType,
                              @RequestParam MultipartFile file) {
         try {
             activityService.upload(file, username, activityType);
@@ -45,12 +45,12 @@ public class ActivityRestController {
         }
     }
 
-    @GetMapping("/{username}/getActivities")
+    @GetMapping("/{username}/{activityType}/getActivities")
     public ResponseEntity<Page<ActivityDTO>> getPage(@PathVariable String username,
-                                                               Pageable pageable) {
+                                                     @PathVariable ActivityType activityType,
+                                                     Pageable pageable) {
         try {
-            Page<ActivityDTO> activities = activityService.findSortedActivities(pageable, username);
-
+            final Page<ActivityDTO> activities = activityService.findSortedActivities(pageable, username, activityType);
             return new ResponseEntity<>(activities, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Problem while getting info about activities for user: "+username, e);

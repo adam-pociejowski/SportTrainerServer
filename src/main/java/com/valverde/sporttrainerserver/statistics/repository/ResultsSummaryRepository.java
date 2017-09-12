@@ -1,8 +1,10 @@
 package com.valverde.sporttrainerserver.statistics.repository;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.SummaryDTO;
 import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
+import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,7 @@ public class ResultsSummaryRepository {
                                        final Date intervalBegin,
                                        final Date intervalEnd,
                                        final List<ResultSummaryType> types) {
-        List<SummaryDTO> summaryList = new ArrayList<>();
+        final List<SummaryDTO> summaryList = new ArrayList<>();
         types.forEach(type ->
                 addToListIfNotNull(findSummary(type, username, intervalBegin, intervalEnd), summaryList));
         return summaryList;
@@ -44,6 +46,7 @@ public class ResultsSummaryRepository {
 
     private void setParams(String username, Date intervalBegin, Date intervalEnd, TypedQuery query) {
         query.setParameter("username", username);
+        query.setParameter("activityType", activityType);
         if (intervalBegin != null) {
             query.setParameter("intervalBegin", intervalBegin);
         }
@@ -53,8 +56,8 @@ public class ResultsSummaryRepository {
     }
 
     private String createActivitiesCountQuery(Date intervalBegin, Date intervalEnd) {
-        return "SELECT COUNT(a.id) FROM Activity a " +
-        "JOIN a.user u WHERE u.username = :username " +
+        return "SELECT COUNT(a.id) FROM Activity a JOIN a.user u " +
+                "WHERE u.username = :username AND a.type = :activityType " +
                 getIntervalClause(intervalBegin, intervalEnd);
     }
 
@@ -91,8 +94,8 @@ public class ResultsSummaryRepository {
     }
 
     private String createQueryForSummary(ResultSummaryType type, Date intervalBegin, Date intervalEnd) {
-        return "SELECT "+getSelectSection(type)+" FROM Activity a " +
-                "JOIN a.user u WHERE u.username = :username " +
+        return "SELECT "+getSelectSection(type)+" FROM Activity a JOIN a.user u " +
+                "WHERE u.username = :username AND a.type = :activityType " +
                 getIntervalClause(intervalBegin, intervalEnd);
     }
 
@@ -129,4 +132,7 @@ public class ResultsSummaryRepository {
     }
 
     private final JpaContext jpaContext;
+
+    @Setter
+    private ActivityType activityType;
 }

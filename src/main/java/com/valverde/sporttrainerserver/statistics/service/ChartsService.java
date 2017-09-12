@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.statistics.service;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.ResultsSummaryDTO;
 import com.valverde.sporttrainerserver.statistics.dto.SummaryDTO;
 import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
@@ -16,7 +17,9 @@ public class ChartsService {
     public List<ResultsSummaryDTO> generateStatsForInterval(final String username,
                                                             final Integer interval,
                                                             final Integer amount,
-                                                            final ResultSummaryType type) {
+                                                            final ResultSummaryType type,
+                                                            final ActivityType activityType) {
+        summaryRepository.setActivityType(activityType);
         final List<DateSplit> dateSplits = generateDateSplits(amount, interval, new Date());
         final List<ResultsSummaryDTO> statsSummaries = new ArrayList<>();
         for (DateSplit split : dateSplits) {

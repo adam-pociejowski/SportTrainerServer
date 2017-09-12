@@ -56,9 +56,16 @@ public class ActivityService {
         save(activityDTO, userService.findByUsername(username));
     }
 
-    public Page<ActivityDTO> findSortedActivities(Pageable pageable, String username) {
-        Page<Activity> page = activityRepository.findAllByUsername(username, pageable);
-        List<ActivityDTO> activityDTOs = new ArrayList<>();
+    public Page<ActivityDTO> findSortedActivities(final Pageable pageable,
+                                                  final String username,
+                                                  final ActivityType activityType) {
+        final Page<Activity> page;
+        if (activityType.equals(ActivityType.ALL)) {
+            page = activityRepository.findAllByUsername(username, pageable);
+        } else {
+            page = activityRepository.findAllByUsernameAndType(username, activityType, pageable);
+        }
+        final List<ActivityDTO> activityDTOs = new ArrayList<>();
         page.getContent().forEach(activity -> activityDTOs.add(ActivityDTO.toDTO(activity)));
         return new PageImpl<>(activityDTOs, pageable, page.getTotalElements());
     }

@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.statistics.service;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.repository.ActivityRecordsRepository;
 import com.valverde.sporttrainerserver.statistics.dto.ActivityStatsDTO;
 import com.valverde.sporttrainerserver.statistics.dto.UserStatsSummaryDTO;
@@ -13,9 +14,13 @@ import java.util.List;
 public class UserRecordsService {
 
     @Transactional
-    public UserStatsSummaryDTO findUserRecords(String username, Date intervalBegin, Date intervalEnd) {
-        List<ActivityStatsDTO> records = activityRecordsRepository.findRecordsForInterval(username, intervalBegin, intervalEnd);
-        UserStatsSummaryDTO userRecords = new UserStatsSummaryDTO();
+    public UserStatsSummaryDTO findUserRecords(final String username,
+                                               final Date intervalBegin,
+                                               final Date intervalEnd,
+                                               final ActivityType activityType) {
+        final List<ActivityStatsDTO> records = activityRecordsRepository
+                .findRecordsForInterval(username, intervalBegin, intervalEnd, activityType);
+        final UserStatsSummaryDTO userRecords = new UserStatsSummaryDTO();
         userRecords.setIntervalBegin(intervalBegin);
         userRecords.setIntervalEnd(intervalEnd);
         userRecords.setStats(records);

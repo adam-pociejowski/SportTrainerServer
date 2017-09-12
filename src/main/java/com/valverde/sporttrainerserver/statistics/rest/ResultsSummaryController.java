@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.statistics.rest;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.ResultsSummaryDTO;
 import com.valverde.sporttrainerserver.statistics.service.ResultsSummaryService;
 import lombok.extern.apachecommons.CommonsLog;
@@ -15,13 +16,17 @@ import java.util.Date;
 @RestController
 public class ResultsSummaryController {
 
-    @GetMapping("/{username}/getSummary")
+    @GetMapping("/{username}/{activityType}/getSummary")
     public ResponseEntity<ResultsSummaryDTO> getSummary(
             @PathVariable String username,
+            @PathVariable ActivityType activityType,
             @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date dateFrom,
             @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date dateTo) {
         try {
-            ResultsSummaryDTO resultsSummary = resultsSummaryService.findResultsSummary(username, dateFrom, dateTo);
+            ResultsSummaryDTO resultsSummary = resultsSummaryService.findResultsSummary(username,
+                    dateFrom,
+                    dateTo,
+                    activityType);
             return new ResponseEntity<>(resultsSummary, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Problem while getting info about summary for user: "+username, e);

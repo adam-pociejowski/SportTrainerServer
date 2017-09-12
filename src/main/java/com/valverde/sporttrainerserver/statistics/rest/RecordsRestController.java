@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.statistics.rest;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.UserStatsSummaryDTO;
 import com.valverde.sporttrainerserver.statistics.service.UserRecordsService;
 import lombok.extern.apachecommons.CommonsLog;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RecordsRestController {
 
-    @GetMapping("/{username}/getRecords")
-    public ResponseEntity<UserStatsSummaryDTO> getRecords(@PathVariable String username) {
+    @GetMapping("/{username}/{activityType}/getRecords")
+    public ResponseEntity<UserStatsSummaryDTO> getRecords(@PathVariable String username,
+                                                          @PathVariable ActivityType activityType) {
         try {
-            UserStatsSummaryDTO userRecords = userRecordsService.findUserRecords(username, null, null);
+            UserStatsSummaryDTO userRecords = userRecordsService
+                    .findUserRecords(username, null, null, activityType);
             return new ResponseEntity<>(userRecords, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Problem while getting info about statistics for user: "+username, e);

@@ -1,5 +1,6 @@
 package com.valverde.sporttrainerserver.statistics.rest;
 
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.ResultsSummaryDTO;
 import com.valverde.sporttrainerserver.statistics.enums.ResultSummaryType;
 import com.valverde.sporttrainerserver.statistics.service.ChartsService;
@@ -16,13 +17,19 @@ import java.util.List;
 @RequestMapping("charts")
 public class ChartsController {
 
-    @GetMapping("/{username}/getStatsForInterval")
+    @GetMapping("/{username}/{activityType}/getStatsForInterval")
     public ResponseEntity<List<ResultsSummaryDTO>> getRecords(@PathVariable String username,
+                                                              @PathVariable ActivityType activityType,
                                                               @RequestParam Integer interval,
                                                               @RequestParam Integer amount,
                                                               @RequestParam ResultSummaryType type) {
         try {
-            final List<ResultsSummaryDTO> stats = chartsService.generateStatsForInterval(username, interval, amount, type);
+            final List<ResultsSummaryDTO> stats = chartsService.generateStatsForInterval(
+                    username,
+                    interval,
+                    amount,
+                    type,
+                    activityType);
             return new ResponseEntity<>(stats, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

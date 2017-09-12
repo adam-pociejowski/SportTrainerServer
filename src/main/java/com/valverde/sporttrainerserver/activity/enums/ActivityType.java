@@ -4,7 +4,8 @@ import lombok.Getter;
 
 public enum ActivityType {
     RUNNING("Running", 1),
-    CYCLING("Cycling", 2);
+    CYCLING("Cycling", 2),
+    ALL("All", 0);
 
     @Getter
     private String typeName;

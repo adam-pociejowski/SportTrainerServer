@@ -1,6 +1,7 @@
 package com.valverde.sporttrainerserver.statistics.repository;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
+import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.entity.ActivityRecord;
 import com.valverde.sporttrainerserver.statistics.enums.RecordMeasureType;
 import com.valverde.sporttrainerserver.statistics.enums.RecordType;
@@ -19,8 +20,12 @@ import java.util.List;
 @Component
 public class ActivityRecordsRepository {
 
-    public List<ActivityStatsDTO> findRecordsForInterval(@NotNull String username, Date intervalBegin, Date intervalEnd) {
-        List<ActivityStatsDTO> recordsList = new ArrayList<>();
+    public List<ActivityStatsDTO> findRecordsForInterval(final @NotNull String username,
+                                                         final Date intervalBegin,
+                                                         final Date intervalEnd,
+                                                         final ActivityType activityType) {
+        this.activityType = activityType;
+        final List<ActivityStatsDTO> recordsList = new ArrayList<>();
         this.addToListIfNotNull(this.findRecord(username, RecordType.ONE_KILOMETER, intervalBegin, intervalEnd), recordsList);
         this.addToListIfNotNull(this.findRecord(username, RecordType.TWO_KILOMETERS, intervalBegin, intervalEnd), recordsList);
         this.addToListIfNotNull(this.findRecord(username, RecordType.THREE_KILOMETERS, intervalBegin, intervalEnd), recordsList);
@@ -53,6 +58,7 @@ public class ActivityRecordsRepository {
         try {
             query.setParameter("username", username);
             query.setParameter("recordType", recordType);
+            query.setParameter("activityType", activityType);
             if (intervalBegin != null) {
                 query.setParameter("intervalBegin", intervalBegin);
             }
@@ -64,7 +70,9 @@ public class ActivityRecordsRepository {
             if (activityRecord != null) {
                 return activityRecord;
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            return null;
+        }
         finally {
             em.close();
         }
@@ -74,6 +82,7 @@ public class ActivityRecordsRepository {
     private String createUserRecordsQueryString(Date intervalBegin, Date intervalEnd, RecordType recordType) {
         return "SELECT ar FROM ActivityRecord ar JOIN FETCH ar.activity a " +
                 "JOIN a.user u WHERE u.username = :username AND ar.type = :recordType " +
+                "AND a.type = :activityType " +
                 this.getIntervalClause(intervalBegin, intervalEnd) +
                 "ORDER BY ar.value " + this.getSortType(recordType);
     }
@@ -85,6 +94,7 @@ public class ActivityRecordsRepository {
         try {
             TypedQuery query = em.createQuery(queryString, Activity.class);
             query.setParameter("username", username);
+            query.setParameter("activityType", activityType);
             if (intervalBegin != null) {
                 query.setParameter("intervalBegin", intervalBegin);
             }
@@ -123,6 +133,7 @@ public class ActivityRecordsRepository {
     private String createLongestDistanceQueryString(RecordType recordType, Date intervalBegin,
                                                           Date intervalEnd) {
         return "SELECT a FROM Activity a JOIN a.user u WHERE u.username = :username " +
+                "AND a.type = :activityType " +
                 this.getIntervalClause(intervalBegin, intervalEnd) + "ORDER BY " + this.getOrderByClause(recordType);
     }
 
@@ -167,4 +178,6 @@ public class ActivityRecordsRepository {
     }
 
     private final JpaContext jpaContext;
+
+    private ActivityType activityType;
 }
