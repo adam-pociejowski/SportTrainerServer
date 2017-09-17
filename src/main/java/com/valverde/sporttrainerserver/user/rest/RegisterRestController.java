@@ -1,9 +1,9 @@
-package com.valverde.sporttrainerserver.register.rest;
+package com.valverde.sporttrainerserver.user.rest;
 
-import com.valverde.sporttrainerserver.base.service.UserService;
-import com.valverde.sporttrainerserver.register.dto.RegisterDTO;
-import com.valverde.sporttrainerserver.register.dto.RegisterValidationDTO;
-import com.valverde.sporttrainerserver.register.service.RegisterValidationService;
+import com.valverde.sporttrainerserver.user.service.UserService;
+import com.valverde.sporttrainerserver.user.dto.RegisterDTO;
+import com.valverde.sporttrainerserver.user.dto.RegisterValidationDTO;
+import com.valverde.sporttrainerserver.user.service.RegisterValidationService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class RegisterRestController {
             log.info("User with username: "+register.getUsername()+" has validation errors.");
             return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("Problem while register", e);
+            log.error("Problem while user", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

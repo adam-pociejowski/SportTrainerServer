@@ -1,6 +1,6 @@
 package com.valverde.sporttrainerserver.base.security;
 
-import com.valverde.sporttrainerserver.base.entity.User;
+import com.valverde.sporttrainerserver.user.entity.User;
 
 public final class JwtUserFactory {
 

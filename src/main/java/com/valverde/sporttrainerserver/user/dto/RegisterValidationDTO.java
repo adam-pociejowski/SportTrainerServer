@@ -1,6 +1,6 @@
-package com.valverde.sporttrainerserver.register.dto;
+package com.valverde.sporttrainerserver.user.dto;
 
-import com.valverde.sporttrainerserver.register.enums.ValidationErrorType;
+import com.valverde.sporttrainerserver.user.enums.ValidationErrorType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

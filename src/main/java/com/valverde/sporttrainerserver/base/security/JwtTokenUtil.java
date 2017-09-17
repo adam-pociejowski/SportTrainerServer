@@ -135,6 +135,8 @@ public class JwtTokenUtil {
         return doGenerateToken(claims);
     }
 
+
+
     private String doGenerateToken(Map<String, Object> claims) {
         final Date createdDate = (Date) claims.get(CLAIM_KEY_CREATED);
         final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);

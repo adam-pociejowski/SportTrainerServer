@@ -1,10 +1,13 @@
-package com.valverde.sporttrainerserver.base.service;
+package com.valverde.sporttrainerserver.user.service;
 
-import com.valverde.sporttrainerserver.base.entity.User;
-import com.valverde.sporttrainerserver.base.repository.UserRepository;
+import com.valverde.sporttrainerserver.user.entity.User;
+import com.valverde.sporttrainerserver.user.entity.UserTrainingData;
+import com.valverde.sporttrainerserver.user.enums.Country;
+import com.valverde.sporttrainerserver.user.enums.Gender;
+import com.valverde.sporttrainerserver.user.enums.MeterUnits;
+import com.valverde.sporttrainerserver.user.repository.UserRepository;
 import com.valverde.sporttrainerserver.base.util.EncodingUtils;
-import com.valverde.sporttrainerserver.register.dto.RegisterDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.valverde.sporttrainerserver.user.dto.RegisterDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -28,7 +31,18 @@ public class UserService {
         user.setUsername(registerDTO.getUsername());
         user.setPasswordHash(EncodingUtils.encodePassword(registerDTO.getPassword()));
         user.setRegisterDate(new Date());
+        user.setUserTrainingData(createDefaultTrainingData(user));
         userRepository.save(user);
+    }
+
+    private UserTrainingData createDefaultTrainingData(final User user) {
+        final UserTrainingData userTrainingData = new UserTrainingData();
+        userTrainingData.setDisplayName(user.getUsername());
+        userTrainingData.setMeterUnits(MeterUnits.METRIC);
+        userTrainingData.setCountry(Country.POLAND);
+        userTrainingData.setGender(Gender.MALE);
+        userTrainingData.setUser(user);
+        return userTrainingData;
     }
 
     public UserService(UserRepository userRepository) {

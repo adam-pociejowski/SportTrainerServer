@@ -2,7 +2,7 @@ package com.valverde.sporttrainerserver.activity.dto;
 
 import com.valverde.sporttrainerserver.activity.entity.Activity;
 import com.valverde.sporttrainerserver.activity.enums.ActivityOrigin;
-import com.valverde.sporttrainerserver.base.entity.User;
+import com.valverde.sporttrainerserver.user.entity.User;
 import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.statistics.dto.ActivityStatsDTO;
 import lombok.Data;

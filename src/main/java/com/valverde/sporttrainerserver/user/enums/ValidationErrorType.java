@@ -1,4 +1,4 @@
-package com.valverde.sporttrainerserver.register.enums;
+package com.valverde.sporttrainerserver.user.enums;
 
 public enum ValidationErrorType {
     USERNAME,

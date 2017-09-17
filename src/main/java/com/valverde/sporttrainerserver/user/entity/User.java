@@ -1,4 +1,4 @@
-package com.valverde.sporttrainerserver.base.entity;
+package com.valverde.sporttrainerserver.user.entity;
 
 import lombok.Data;
 import javax.persistence.*;
@@ -14,6 +14,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserTrainingData userTrainingData;
 
     @OneToMany(mappedBy = "user")
     private List<Activity> activities;

@@ -53,8 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
-                .antMatchers(HttpMethod.POST, "/register").permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/user", "/register").permitAll()
+                .antMatchers("/auth/**", "/login/facebook").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity
@@ -65,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, UserDetailsService userDetailsService) {
+    public WebSecurityConfig(final JwtAuthenticationEntryPoint unauthorizedHandler,
+                             final UserDetailsService userDetailsService) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.userDetailsService = userDetailsService;
     }

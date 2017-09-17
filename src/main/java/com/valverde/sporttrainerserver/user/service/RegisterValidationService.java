@@ -1,12 +1,11 @@
-package com.valverde.sporttrainerserver.register.service;
+package com.valverde.sporttrainerserver.user.service;
 
-import com.valverde.sporttrainerserver.base.entity.User;
-import com.valverde.sporttrainerserver.base.service.UserService;
-import com.valverde.sporttrainerserver.register.dto.RegisterDTO;
-import com.valverde.sporttrainerserver.register.dto.RegisterValidationDTO;
+import com.valverde.sporttrainerserver.user.entity.User;
+import com.valverde.sporttrainerserver.user.dto.RegisterDTO;
+import com.valverde.sporttrainerserver.user.dto.RegisterValidationDTO;
 
-import static com.valverde.sporttrainerserver.register.enums.ValidationErrorType.PASSWORD;
-import static com.valverde.sporttrainerserver.register.enums.ValidationErrorType.USERNAME;
+import static com.valverde.sporttrainerserver.user.enums.ValidationErrorType.PASSWORD;
+import static com.valverde.sporttrainerserver.user.enums.ValidationErrorType.USERNAME;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

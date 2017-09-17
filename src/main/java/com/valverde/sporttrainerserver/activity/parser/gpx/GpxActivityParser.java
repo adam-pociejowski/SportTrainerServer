@@ -27,7 +27,7 @@ import java.util.List;
 public class GpxActivityParser implements ActivityParser {
 
     @Override
-    public ActivityDTO parse(final MultipartFile multipartFile, final ActivityType type) throws Exception {
+    public synchronized ActivityDTO parse(final MultipartFile multipartFile, final ActivityType type) throws Exception {
         final File file = FileUtils.convertToFile(multipartFile);
         try {
             final GpxType gpxType = jaxbService.unMarshall(file, GpxType.class);

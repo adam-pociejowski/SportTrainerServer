@@ -1,7 +1,7 @@
 package com.valverde.sporttrainerserver.base.security.service;
 
-import com.valverde.sporttrainerserver.base.entity.User;
-import com.valverde.sporttrainerserver.base.repository.UserRepository;
+import com.valverde.sporttrainerserver.user.entity.User;
+import com.valverde.sporttrainerserver.user.repository.UserRepository;
 import com.valverde.sporttrainerserver.base.security.JwtUserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

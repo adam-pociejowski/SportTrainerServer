@@ -1,6 +1,6 @@
-package com.valverde.sporttrainerserver.base.repository;
+package com.valverde.sporttrainerserver.user.repository;
 
-import com.valverde.sporttrainerserver.base.entity.User;
+import com.valverde.sporttrainerserver.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

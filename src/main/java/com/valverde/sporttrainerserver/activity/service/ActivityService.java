@@ -6,8 +6,9 @@ import com.valverde.sporttrainerserver.activity.enums.ActivityType;
 import com.valverde.sporttrainerserver.activity.repository.ActivityRepository;
 import com.valverde.sporttrainerserver.activity.parser.ActivityParser;
 import com.valverde.sporttrainerserver.activity.util.ActivitySplitUtil;
-import com.valverde.sporttrainerserver.base.entity.User;
-import com.valverde.sporttrainerserver.base.service.UserService;
+import com.valverde.sporttrainerserver.activity.util.ActivityUtils;
+import com.valverde.sporttrainerserver.user.entity.User;
+import com.valverde.sporttrainerserver.user.service.UserService;
 import com.valverde.sporttrainerserver.statistics.util.ActivityRecordsUtil;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.io.FilenameUtils;
@@ -67,6 +68,7 @@ public class ActivityService {
         }
         final List<ActivityDTO> activityDTOs = new ArrayList<>();
         page.getContent().forEach(activity -> activityDTOs.add(ActivityDTO.toDTO(activity)));
+//        ActivityUtils.optimizeTrackPoints(activityDTOs);
         return new PageImpl<>(activityDTOs, pageable, page.getTotalElements());
     }
 

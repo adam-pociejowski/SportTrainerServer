@@ -1,4 +1,4 @@
-package com.valverde.sporttrainerserver.register.dto;
+package com.valverde.sporttrainerserver.user.dto;
 
 import lombok.Data;
 
