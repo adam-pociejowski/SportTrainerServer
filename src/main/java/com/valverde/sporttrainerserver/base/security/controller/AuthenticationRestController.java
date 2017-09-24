@@ -4,8 +4,10 @@ import com.valverde.sporttrainerserver.base.security.JwtAuthenticationRequest;
 import com.valverde.sporttrainerserver.base.security.JwtTokenUtil;
 import com.valverde.sporttrainerserver.base.security.JwtUser;
 import com.valverde.sporttrainerserver.base.security.service.JwtAuthenticationResponse;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,8 +18,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 
+@CommonsLog
 @CrossOrigin
 @RestController
 public class AuthenticationRestController {
@@ -25,16 +29,21 @@ public class AuthenticationRestController {
     @PostMapping(value = "/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest request,
                                                        Device device) throws AuthenticationException {
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails, device);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        try {
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+            final String token = jwtTokenUtil.generateToken(userDetails, device);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        } catch (Exception e) {
+            log.error("Exception while trying to authorize", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(value = "/refresh")
@@ -45,13 +54,6 @@ public class AuthenticationRestController {
 
         String refreshedToken = jwtTokenUtil.refreshToken(token);
         return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
-
-//        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-//            String refreshedToken = jwtTokenUtil.refreshToken(token);
-//            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
-//        } else {
-//            return ResponseEntity.badRequest().body(null);
-//        }
     }
 
     @Autowired
