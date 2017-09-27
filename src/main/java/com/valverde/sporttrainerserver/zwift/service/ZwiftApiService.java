@@ -28,19 +28,6 @@ public abstract class ZwiftApiService {
         return JsonUtils.convertToObject(response.getBody(), clazz);
     }
 
-    <T> T getForEntity(final UriComponentsBuilder builder,
-                        final HttpEntity entity,
-                        final Class<T> clazz) throws Exception {
-        final ResponseEntity<String> response = exchange(builder, entity, HttpMethod.GET);
-        return JsonUtils.convertToObject(response.getBody(), clazz);
-    }
-
-    String getForJson(final UriComponentsBuilder builder,
-                        final HttpEntity entity) throws Exception {
-        final ResponseEntity<String> response = exchange(builder, entity, HttpMethod.GET);
-        return response.getBody();
-    }
-
     byte[] getForByteArray(final UriComponentsBuilder builder,
                            final HttpEntity entity) throws Exception {
         final ResponseEntity<byte[]> response = new RestTemplate().exchange(

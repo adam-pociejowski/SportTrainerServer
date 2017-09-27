@@ -1,31 +1,64 @@
 package com.valverde.sporttrainerserver.zwift.rest;
 
-import com.valverde.sporttrainerserver.zwift.dto.RiderStateDTO;
-import com.valverde.sporttrainerserver.zwift.service.ZwiftRiderStatusService;
+import com.valverde.sporttrainerserver.zwift.dto.ZwiftRankingDTO;
+import com.valverde.sporttrainerserver.zwift.dto.ZwiftStartActivityDTO;
+import com.valverde.sporttrainerserver.zwift.service.ZwiftActivityService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CommonsLog
 @RestController
 public class ZwiftRestController {
 
-    @GetMapping("/zwift/getRiderStatus")
-    public ResponseEntity<RiderStateDTO> getRiderStatus() {
+    @PostMapping("/zwift/startActivity")
+    public ResponseEntity<Long> startActivity(@RequestBody ZwiftStartActivityDTO zwiftStartActivity) {
         try {
-            final RiderStateDTO riderState = zwiftRiderStatusService.getRiderStatus();
-            return new ResponseEntity<>(riderState, HttpStatus.OK);
+            final Long activityId = zwiftActivityService.startActivity(zwiftStartActivity);
+            return new ResponseEntity<>(activityId, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Exception while getting rider status", e);
+            log.error("Exception while trying to start activity", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ZwiftRestController(final ZwiftRiderStatusService zwiftRiderStatusService) {
-        this.zwiftRiderStatusService = zwiftRiderStatusService;
+    @GetMapping("/zwift/getTrackRankingForActivity")
+    public ResponseEntity<ZwiftRankingDTO> getTrackRankingForActivity(@RequestParam Long activityId) {
+        try {
+            final ZwiftRankingDTO rankingDTO = zwiftActivityService.getStatsForActivity(activityId);
+            return new ResponseEntity<>(rankingDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception while trying to get rack ranking for activity", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    private final ZwiftRiderStatusService zwiftRiderStatusService;
+    @GetMapping("/zwift/getTrackRanking")
+    public ResponseEntity<ZwiftRankingDTO> getTrackRanking(@RequestParam Integer distance) {
+        try {
+            final ZwiftRankingDTO rankingDTO = zwiftActivityService.getTrackRanking(distance);
+            return new ResponseEntity<>(rankingDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception while trying to get track ranking", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/zwift/finishActivity")
+    public ResponseEntity<HttpStatus> startActivity(@RequestParam Long activityId) {
+        try {
+            zwiftActivityService.finishActivity(activityId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Exception while trying to finish activity", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ZwiftRestController(final ZwiftActivityService zwiftActivityService) {
+        this.zwiftActivityService = zwiftActivityService;
+    }
+
+    private final ZwiftActivityService zwiftActivityService;
 }

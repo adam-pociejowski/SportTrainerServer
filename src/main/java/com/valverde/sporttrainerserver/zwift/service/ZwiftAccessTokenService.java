@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
+import java.util.Date;
 
 @Service
 public class ZwiftAccessTokenService extends ZwiftApiService {
@@ -17,6 +18,14 @@ public class ZwiftAccessTokenService extends ZwiftApiService {
         final HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formData, prepareTokenHeaders());
         final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ZWIFT_TOKEN_API_URL);
         return postForEntity(builder, entity, ZwiftTokenDTO.class);
+    }
+
+    boolean isTokenExpired(final ZwiftTokenDTO accessToken) {
+        final Long expiresIn = accessToken.getExpiresIn() * 1000;
+        final Long tokenGenerated = accessToken.getTokenGenerated().getTime();
+        final Long downloadTokenBefore = 10000L;
+        final Date now = new Date();
+        return (tokenGenerated + expiresIn) < (now.getTime() - downloadTokenBefore);
     }
 
     @NotNull

@@ -2,6 +2,7 @@ package com.valverde.sporttrainerserver.zwift.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import java.util.Date;
 
 @Data
 public class ZwiftTokenDTO {
@@ -29,4 +30,6 @@ public class ZwiftTokenDTO {
 
     @JsonProperty("session-state")
     private String sessionState;
+
+    private Date tokenGenerated;
 }
