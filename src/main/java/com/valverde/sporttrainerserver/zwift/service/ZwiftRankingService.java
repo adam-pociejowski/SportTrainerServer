@@ -7,6 +7,7 @@ import com.valverde.sporttrainerserver.zwift.entity.RiderState;
 import com.valverde.sporttrainerserver.zwift.entity.ZwiftActivity;
 import com.valverde.sporttrainerserver.zwift.enums.ZwiftTrack;
 import com.valverde.sporttrainerserver.zwift.repository.ZwiftActivityRankingRepository;
+import com.valverde.sporttrainerserver.zwift.util.ZwiftUtils;
 import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,11 +20,12 @@ import java.util.List;
 public class ZwiftRankingService {
 
     ZwiftRankingDTO getRankingForRiderStatus(final RiderStateDTO riderStateDTO, final ZwiftActivity activity) {
+        final Integer distance = riderStateDTO.getDistance();
         final ZwiftRankingDTO zwiftRanking = new ZwiftRankingDTO();
         final List<RiderState> riderStates = zwiftActivityRankingRepository.getRankingForDistanceAndActivity(
                         riderStateDTO.getDistance(),
                         activity.getId());
-        final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates);
+        final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates, distance);
         rankingItems.add(createActualRankingItem(riderStateDTO));
         sortRankingItems(rankingItems);
         zwiftRanking.setResults(rankingItems);
@@ -35,7 +37,7 @@ public class ZwiftRankingService {
     ZwiftRankingDTO getRankingForDistance(final Integer distance, final ZwiftTrack track) {
         final ZwiftRankingDTO zwiftRanking = new ZwiftRankingDTO();
         final List<RiderState> riderStates = zwiftActivityRankingRepository.getRankingForDistance(distance);
-        final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates);
+        final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates, distance);
         sortRankingItems(rankingItems);
         zwiftRanking.setResults(rankingItems);
         zwiftRanking.setTrack(track);
@@ -60,23 +62,26 @@ public class ZwiftRankingService {
     }
 
     private ZwiftRankingItemDTO createActualRankingItem(final RiderStateDTO riderState) {
-        final ZwiftRankingItemDTO rankingItem = convertToRankingItems(riderState, new Date());
+        final ZwiftRankingItemDTO rankingItem = convertToRankingItem(riderState, new Date());
         rankingItem.setActualResult(true);
         return rankingItem;
     }
 
-    private List<ZwiftRankingItemDTO> convertToRankingItems(final List<RiderState> riderStates) {
+    private List<ZwiftRankingItemDTO> convertToRankingItems(final List<RiderState> riderStates,
+                                                            final Integer accurateDistance) {
         final List<ZwiftRankingItemDTO> rankingItems = new ArrayList<>();
         riderStates.forEach(riderState -> {
             final RiderStateDTO riderStateDTO = RiderStateDTO.toDTO(riderState);
             final Date date = riderState.getActivity().getStartDate();
-            rankingItems.add(convertToRankingItems(riderStateDTO, date));
+            final ZwiftRankingItemDTO rankingItem = convertToRankingItem(riderStateDTO, date);
+            rankingItem.setTime(ZwiftUtils.calculateAccurateTime(accurateDistance, riderStateDTO));
+            rankingItems.add(rankingItem);
         });
         return rankingItems;
     }
 
-    private ZwiftRankingItemDTO convertToRankingItems(final RiderStateDTO riderState,
-                                                      final Date date) {
+    private ZwiftRankingItemDTO convertToRankingItem(final RiderStateDTO riderState,
+                                                     final Date date) {
         final ZwiftRankingItemDTO rankingItem = new ZwiftRankingItemDTO();
         rankingItem.setTime(riderState.getTime());
         rankingItem.setRiderName("Adam Pociejowski");

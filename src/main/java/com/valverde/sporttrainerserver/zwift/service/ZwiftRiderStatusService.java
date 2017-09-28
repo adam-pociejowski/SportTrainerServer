@@ -4,12 +4,14 @@ import com.valverde.sporttrainerserver.base.util.AppUtils;
 import com.valverde.sporttrainerserver.zwift.dto.RiderStateDTO;
 import com.valverde.sporttrainerserver.zwift.dto.ZwiftTokenDTO;
 import com.valverde.sporttrainerserver.zwift.proto.ZwiftMessages;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Date;
 
 @Service
+@CommonsLog
 public class ZwiftRiderStatusService extends ZwiftApiService {
 
     RiderStateDTO getRiderStatus(final String riderId) throws Exception {
@@ -31,6 +33,8 @@ public class ZwiftRiderStatusService extends ZwiftApiService {
         if (AppUtils.isNull(accessToken) || zwiftAccessTokenService.isTokenExpired(accessToken)) {
             accessToken = zwiftAccessTokenService.getToken();
             accessToken.setTokenGenerated(new Date());
+            log.info("Zwift access token generated "+accessToken.getAccessToken()+". " +
+                    "Expires in: "+accessToken.getExpiresIn());
         }
     }
 

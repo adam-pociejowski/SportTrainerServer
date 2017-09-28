@@ -29,7 +29,7 @@ public class ZwiftRestController {
             final ZwiftRankingDTO rankingDTO = zwiftActivityService.getStatsForActivity(activityId);
             return new ResponseEntity<>(rankingDTO, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Exception while trying to get rack ranking for activity", e);
+            log.error("Exception while trying to get ranking for activity", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

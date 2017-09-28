@@ -1,6 +1,7 @@
 package com.valverde.sporttrainerserver.zwift.service;
 
 import com.valverde.sporttrainerserver.zwift.dto.ZwiftTokenDTO;
+import lombok.extern.apachecommons.CommonsLog;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Date;
 
 @Service
+@CommonsLog
 public class ZwiftAccessTokenService extends ZwiftApiService {
 
     ZwiftTokenDTO getToken() throws Exception {
@@ -35,6 +37,8 @@ public class ZwiftAccessTokenService extends ZwiftApiService {
         formData.add("username", env.getProperty("ZWIFT_USERNAME"));
         formData.add("password", env.getProperty("ZWIFT_PASSWORD"));
         formData.add("grant_type", "password");
+        log.info("Zwift username: "+env.getProperty("ZWIFT_USERNAME")+
+                " Zwift password: "+env.getProperty("ZWIFT_PASSWORD"));
         return formData;
     }
 

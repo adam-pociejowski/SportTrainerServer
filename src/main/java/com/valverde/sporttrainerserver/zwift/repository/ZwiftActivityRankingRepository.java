@@ -57,7 +57,7 @@ public class ZwiftActivityRankingRepository {
         this.jpaContext = jpaContext;
     }
 
-    private final static Integer RESULT_DISTANCE_INTERVAL = 20;
+    private final static Integer RESULT_DISTANCE_INTERVAL = 40;
 
     private final JpaContext jpaContext;
 }
