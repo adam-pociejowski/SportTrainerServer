@@ -28,7 +28,7 @@ public class ZwiftActivityService {
         return activity.getId();
     }
 
-    public ZwiftRankingDTO getStatsForActivity(final Long activityId) throws Exception {
+    public ZwiftRankingDTO refreshTrackRankingForActivity(final Long activityId, final ZwiftTrack track) throws Exception {
         final ZwiftActivity activity = zwiftActivityRepository.findOne(activityId);
         final RiderStateDTO riderStatusDTO = zwiftRiderStatusService.getRiderStatus(activity.getRiderId());
         if (isActivityStarted(riderStatusDTO)) {
@@ -42,7 +42,8 @@ public class ZwiftActivityService {
         }
         ZwiftRankingDTO ranking = zwiftRankingService.getRankingForRiderStatus(
                 riderStatusDTO,
-                activity);
+                activity,
+                track);
         log.info("Zwift ranking refreshed. Stats amount: "+ranking.getResults().size());
         return ranking;
     }

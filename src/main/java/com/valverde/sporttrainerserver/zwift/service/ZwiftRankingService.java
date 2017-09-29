@@ -19,14 +19,17 @@ import java.util.List;
 @Service
 public class ZwiftRankingService {
 
-    ZwiftRankingDTO getRankingForRiderStatus(final RiderStateDTO riderStateDTO, final ZwiftActivity activity) {
+    ZwiftRankingDTO getRankingForRiderStatus(final RiderStateDTO riderStateDTO,
+                                             final ZwiftActivity activity,
+                                             final ZwiftTrack track) {
         final Integer distance = riderStateDTO.getDistance();
         final ZwiftRankingDTO zwiftRanking = new ZwiftRankingDTO();
         final List<RiderState> riderStates = zwiftActivityRankingRepository.getRankingForDistanceAndActivity(
                         riderStateDTO.getDistance(),
+                        track,
                         activity.getId());
         final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates, distance);
-        rankingItems.add(createActualRankingItem(riderStateDTO));
+        addActualResultToRanking(rankingItems, riderStateDTO, activity.getTrack(), track);
         sortRankingItems(rankingItems);
         zwiftRanking.setResults(rankingItems);
         zwiftRanking.setTrack(activity.getTrack());
@@ -34,9 +37,19 @@ public class ZwiftRankingService {
         return zwiftRanking;
     }
 
+    private void addActualResultToRanking(final List<ZwiftRankingItemDTO> rankingItems,
+                                          final RiderStateDTO riderStateDTO,
+                                          final ZwiftTrack activityTrack,
+                                          final ZwiftTrack rankingTrack) {
+        if (activityTrack.equals(rankingTrack) || rankingTrack.equals(ZwiftTrack.ALL)) {
+            rankingItems.add(createActualRankingItem(riderStateDTO));
+        }
+    }
+
     ZwiftRankingDTO getRankingForDistance(final Integer distance, final ZwiftTrack track) {
         final ZwiftRankingDTO zwiftRanking = new ZwiftRankingDTO();
-        final List<RiderState> riderStates = zwiftActivityRankingRepository.getRankingForDistance(distance);
+        final List<RiderState> riderStates =
+                zwiftActivityRankingRepository.getRankingForDistance(distance, track);
         final List<ZwiftRankingItemDTO> rankingItems = convertToRankingItems(riderStates, distance);
         sortRankingItems(rankingItems);
         zwiftRanking.setResults(rankingItems);
