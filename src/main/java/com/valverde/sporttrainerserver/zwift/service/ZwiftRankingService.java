@@ -70,7 +70,7 @@ public class ZwiftRankingService {
 
     private ZwiftRankingItemDTO getBestResult(final List<ZwiftRankingItemDTO> rankingItems) {
         if (rankingItems.isEmpty())
-            throw new RuntimeException("No results found");
+            throw new NoZwiftResultFoundException();
         return rankingItems.get(0);
     }
 
@@ -112,4 +112,6 @@ public class ZwiftRankingService {
     }
 
     private final ZwiftActivityRankingRepository zwiftActivityRankingRepository;
+
+    public class NoZwiftResultFoundException extends RuntimeException {}
 }

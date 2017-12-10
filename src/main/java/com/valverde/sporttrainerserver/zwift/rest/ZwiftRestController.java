@@ -4,6 +4,7 @@ import com.valverde.sporttrainerserver.zwift.dto.ZwiftRankingDTO;
 import com.valverde.sporttrainerserver.zwift.dto.ZwiftStartActivityDTO;
 import com.valverde.sporttrainerserver.zwift.enums.ZwiftTrack;
 import com.valverde.sporttrainerserver.zwift.service.ZwiftActivityService;
+import com.valverde.sporttrainerserver.zwift.service.ZwiftRankingService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,16 @@ public class ZwiftRestController {
     }
 
     @GetMapping("/zwift/getTrackRanking")
-    public ResponseEntity<ZwiftRankingDTO> getTrackRanking(@RequestParam Integer distance) {
+    public ResponseEntity<ZwiftRankingDTO> getTrackRanking(@RequestParam Integer distance,
+                                                           @RequestParam ZwiftTrack track) {
         try {
-            final ZwiftRankingDTO rankingDTO = zwiftActivityService.getTrackRanking(distance);
+            final ZwiftRankingDTO rankingDTO = zwiftActivityService.getTrackRanking(distance, track);
             return new ResponseEntity<>(rankingDTO, HttpStatus.OK);
+        } catch (ZwiftRankingService.NoZwiftResultFoundException e) {
+            log.info("Exception while trying to get track ranking");
+            return new ResponseEntity<>(
+                    zwiftActivityService.createEmptyRanking(distance, track),
+                    HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception while trying to get track ranking", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

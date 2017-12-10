@@ -11,6 +11,8 @@ import com.valverde.sporttrainerserver.zwift.repository.ZwiftActivityRepository;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -48,8 +50,16 @@ public class ZwiftActivityService {
         return ranking;
     }
 
-    public ZwiftRankingDTO getTrackRanking(final Integer distance) {
-        return zwiftRankingService.getRankingForDistance(distance, ZwiftTrack.WATOPIA_VOLCANO_FLAT);
+    public ZwiftRankingDTO getTrackRanking(final Integer distance, final ZwiftTrack track) {
+        return zwiftRankingService.getRankingForDistance(distance, track);
+    }
+
+    public ZwiftRankingDTO createEmptyRanking(final Integer distance, final ZwiftTrack track) {
+        final ZwiftRankingDTO ranking = new ZwiftRankingDTO();
+        ranking.setDistance(distance);
+        ranking.setTrack(track);
+        ranking.setResults(Collections.emptyList());
+        return ranking;
     }
 
     public void finishActivity(Long activityId) {
