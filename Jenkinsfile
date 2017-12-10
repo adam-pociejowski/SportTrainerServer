@@ -17,7 +17,7 @@ pipeline {
 
           stage ('Deploy Stage') {
               steps {
-                  sh '/home/valverde/scripts/sporttrainer.sh'
+                  sh '/home/valverde/scripts/jenkins/sporttrainer.sh'
               }
           }
     }
