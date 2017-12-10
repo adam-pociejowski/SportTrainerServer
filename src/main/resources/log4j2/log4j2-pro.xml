@@ -13,7 +13,7 @@
                 </pattern>>
             </PatternLayout>
         </Console>
-        <File name="FileAppender" fileName="/home/valverde/logs/sporttrainer.log" >
+        <File name="FileAppender" fileName="${sys:user.home}/logs/sporttrainer2.log" >
             <PatternLayout>
                 <pattern>
                     [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
@@ -22,10 +22,6 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="com.example.log4j2demo" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-        </Logger>
-
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="FileAppender" />
