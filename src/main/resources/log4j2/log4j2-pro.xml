@@ -20,11 +20,31 @@
                 </pattern>
             </PatternLayout>
         </File>
+        <SMTP suppressExceptions="false"
+              name="MAIL_ERROR"
+              subject="[SportTrainer] - Exception"
+              to="adam.pociejowski@gmail.com"
+              from="valverdeapps@gmail.com"
+              smtpHost="smtp.gmail.com"
+              smtpPort="465"
+              smtpProtocol="smtps"
+              smtpUsername="valverdeapps@gmail.com"
+              smtpPassword="valverdeapps123"
+              bufferSize="20">
+            <ThresholdFilter level="error" />
+            <PatternLayout>
+                <pattern>%d{dd-MM-yyyy HH:mm:ss,SSS} %5p %m%n</pattern>
+            </PatternLayout>
+        </SMTP>
+        <Async name="MAIL_ERROR_ASYNC">
+            <AppenderRef ref="MAIL_ERROR"/>
+        </Async>
     </Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="FileAppender" />
+            <AppenderRef ref="MAIL_ERROR_ASYNC" level="error"/>
         </Root>
     </Loggers>
 </Configuration>
